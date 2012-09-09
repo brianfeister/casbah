@@ -29,3 +29,13 @@ function roots_google_analytics() {
 }
 
 add_action('wp_footer', 'roots_google_analytics');
+
+/**
+ *  Hooks for body
+ */
+
+function the_function() {
+
+}
+
+add_action('wp_head', 'roots_feed_link', -2);

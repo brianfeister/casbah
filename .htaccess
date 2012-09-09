@@ -7,6 +7,7 @@ RewriteRule ^index\.php$ - [L]
 RewriteRule ^assets/css/(.*) /casbahdance.org/wp-content/themes/casbah_dance_custom/assets/css/$1 [QSA,L]
 RewriteRule ^assets/js/(.*) /casbahdance.org/wp-content/themes/casbah_dance_custom/assets/js/$1 [QSA,L]
 RewriteRule ^assets/img/(.*) /casbahdance.org/wp-content/themes/casbah_dance_custom/assets/img/$1 [QSA,L]
+RewriteRule ^assets/fonts/(.*) /casbahdance.org/wp-content/themes/casbah_dance_custom/assets/fonts/$1 [QSA,L]
 RewriteRule ^plugins/(.*) /casbahdance.org/wp-content/plugins/$1 [QSA,L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
