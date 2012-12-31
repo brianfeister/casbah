@@ -2,74 +2,108 @@
 
 // Custom functions
 
-// Enable Bootstrap Navigation with WP-native Nav - Roots Theme - from https://gist.github.com/2025312
+function show_breadcrumbs() {
 
-class Bootstrap_Walker_Nav_Menu extends Walker_Nav_Menu {
+  $showOnHome = 0; // 1 - show breadcrumbs on the homepage, 0 - don't show
+  $delimiter = '&raquo;'; // delimiter between crumbs
+  $home = 'Home'; // text for the 'Home' link
+  $showCurrent = 1; // 1 - show current post/page title in breadcrumbs, 0 - don't show
+  $before = '<span class="current">'; // tag before the current crumb
+  $after = '</span>'; // tag after the current crumb
 
+  global $post;
+  $homeLink = get_bloginfo('url');
 
-	function start_lvl( &$output, $depth ) {
+  if (is_home() || is_front_page()) {
 
-		//In a child UL, add the 'dropdown-menu' class
-		$indent = str_repeat( "\t", $depth );
-		$output    .= "\n$indent<ul class=\"dropdown-menu\">\n";
+    if ($showOnHome == 1) echo '<div id="crumbs"><a href="' . $homeLink . '">' . $home . '</a></div>';
 
-	}
+  } else {
 
-	public function start_el( &$output, $item, $depth = 0, $args = array(), $id = 0 ) {
+    echo '<div id="crumbs"><a href="' . $homeLink . '">' . $home . '</a> ' . $delimiter . ' ';
 
-		$indent = ( $depth ) ? str_repeat( "\t", $depth ) : '';
+    if ( is_category() ) {
+      $thisCat = get_category(get_query_var('cat'), false);
+      if ($thisCat->parent != 0) echo get_category_parents($thisCat->parent, TRUE, ' ' . $delimiter . ' ');
+      echo $before . 'Archive by category "' . single_cat_title('', false) . '"' . $after;
 
-		$li_attributes = '';
-		$class_names = $value = '';
+    } elseif ( is_search() ) {
+      echo $before . 'Search results for "' . get_search_query() . '"' . $after;
 
-		$classes = empty( $item->classes ) ? array() : (array) $item->classes;
+    } elseif ( is_day() ) {
+      echo '<a href="' . get_year_link(get_the_time('Y')) . '">' . get_the_time('Y') . '</a> ' . $delimiter . ' ';
+      echo '<a href="' . get_month_link(get_the_time('Y'),get_the_time('m')) . '">' . get_the_time('F') . '</a> ' . $delimiter . ' ';
+      echo $before . get_the_time('d') . $after;
 
-		//Add class and attribute to LI element that contains a submenu UL.
-		if ($args->has_children){
-			$classes[]      = 'dropdown';
-			$li_attributes .= 'data-dropdown="dropdown"';
-		}
-		$classes[] = 'menu-item-' . $item->ID;
-		//If we are on the current page, add the active class to that menu item.
-		$classes[] = ($item->current) ? 'active' : '';
+    } elseif ( is_month() ) {
+      echo '<a href="' . get_year_link(get_the_time('Y')) . '">' . get_the_time('Y') . '</a> ' . $delimiter . ' ';
+      echo $before . get_the_time('F') . $after;
 
-		//Make sure you still add all of the WordPress classes.
-		$class_names = join( ' ', apply_filters( 'nav_menu_css_class', array_filter( $classes ), $item, $args ) );
-		$class_names = ' class="' . esc_attr( $class_names ) . '"';
+    } elseif ( is_year() ) {
+      echo $before . get_the_time('Y') . $after;
 
-		$id = apply_filters( 'nav_menu_item_id', 'menu-item-'. $item->ID, $item, $args );
-		$id = strlen( $id ) ? ' id="' . esc_attr( $id ) . '"' : '';
+    } elseif ( is_single() && !is_attachment() ) {
+      if ( get_post_type() != 'post' ) {
+        $post_type = get_post_type_object(get_post_type());
+        $slug = $post_type->rewrite;
+        echo '<a href="' . $homeLink . '/' . $slug['slug'] . '/">' . $post_type->labels->singular_name . '</a>';
+        if ($showCurrent == 1) echo ' ' . $delimiter . ' ' . $before . get_the_title() . $after;
+      } else {
+        $cat = get_the_category(); $cat = $cat[0];
+        $cats = get_category_parents($cat, TRUE, ' ' . $delimiter . ' ');
+        if ($showCurrent == 0) $cats = preg_replace("#^(.+)\s$delimiter\s$#", "$1", $cats);
+        echo $cats;
+        if ($showCurrent == 1) echo $before . get_the_title() . $after;
+      }
 
-		$output .= $indent . '<li' . $id . $value . $class_names . $li_attributes . '>';
+    } elseif ( !is_single() && !is_page() && get_post_type() != 'post' && !is_404() ) {
+      $post_type = get_post_type_object(get_post_type());
+      echo $before . $post_type->labels->singular_name . $after;
 
-		//Add attributes to link element.
-		$attributes  = ! empty( $item->attr_title ) ? ' title="'  . esc_attr( $item->attr_title ) .'"' : '';
-		$attributes .= ! empty( $item->target ) ? ' target="' . esc_attr( $item->target     ) .'"' : '';
-		$attributes .= ! empty( $item->xfn ) ? ' rel="'    . esc_attr( $item->xfn        ) .'"' : '';
-		$attributes .= ! empty( $item->url ) ? ' href="'   . esc_attr( $item->url        ) .'"' : '';
-		$attributes .= ($args->has_children) ? ' class="dropdown-toggle" data-toggle="dropdown"' : '';
+    } elseif ( is_attachment() ) {
+      $parent = get_post($post->post_parent);
+      $cat = get_the_category($parent->ID); $cat = $cat[0];
+      echo get_category_parents($cat, TRUE, ' ' . $delimiter . ' ');
+      echo '<a href="' . get_permalink($parent) . '">' . $parent->post_title . '</a>';
+      if ($showCurrent == 1) echo ' ' . $delimiter . ' ' . $before . get_the_title() . $after;
 
-		$item_output = $args->before;
-		$item_output .= '<a'. $attributes .'>';
-		$item_output .= $args->link_before . apply_filters( 'the_title', $item->title, $item->ID ) . $args->link_after;
-		$item_output .= ($args->has_children) ? ' <b class="caret"></b> ' : '';
-		$item_output .= '</a>';
-		$item_output .= $args->after;
+    } elseif ( is_page() && !$post->post_parent ) {
+      if ($showCurrent == 1) echo $before . get_the_title() . $after;
 
-		//Option to create a separator by adding an element with a label of `-` (Bootstrap 2.1.1 divider)
-		// http://wordpress.stackexchange.com/questions/38241/nav-menu-separators
-		if ( $item->title === '-' ) {
-		    $item_output = '<li class="divider"></li>';
-		}
+    } elseif ( is_page() && $post->post_parent ) {
+      $parent_id  = $post->post_parent;
+      $breadcrumbs = array();
+      while ($parent_id) {
+        $page = get_page($parent_id);
+        $breadcrumbs[] = '<a href="' . get_permalink($page->ID) . '">' . get_the_title($page->ID) . '</a>';
+        $parent_id  = $page->post_parent;
+      }
+      $breadcrumbs = array_reverse($breadcrumbs);
+      for ($i = 0; $i < count($breadcrumbs); $i++) {
+        echo $breadcrumbs[$i];
+        if ($i != count($breadcrumbs)-1) echo ' ' . $delimiter . ' ';
+      }
+      if ($showCurrent == 1) echo ' ' . $delimiter . ' ' . $before . get_the_title() . $after;
 
-		// //Option to create a Bootstrap `nav-header` with a WP nav item with a label of `[nav-header]` (Bootstrap 2.0 divider)
-		// $find_nav_titles = '^\[nav-title\]';
-		// if ( preg_match( $find_nav_titles, $item->title ) === true ) {
-		//     $item->title = preg_replace( $find_nav_titles, '', $str );
-		//     $item_output .= '<li class="nav-header"> ' . $item->title;
-		// }
+    } elseif ( is_tag() ) {
+      echo $before . 'Posts tagged "' . single_tag_title('', false) . '"' . $after;
 
-		$output .= apply_filters( 'walker_nav_menu_start_el', $item_output, $item, $depth, $args );
-	}
+    } elseif ( is_author() ) {
+       global $author;
+      $userdata = get_userdata($author);
+      echo $before . 'Articles posted by ' . $userdata->display_name . $after;
 
-}
+    } elseif ( is_404() ) {
+      echo $before . 'Error 404' . $after;
+    }
+
+    if ( get_query_var('paged') ) {
+      if ( is_category() || is_day() || is_month() || is_year() || is_search() || is_tag() || is_author() ) echo ' (';
+      echo __('Page') . ' ' . get_query_var('paged');
+      if ( is_category() || is_day() || is_month() || is_year() || is_search() || is_tag() || is_author() ) echo ')';
+    }
+
+    echo '</div>';
+
+  }
+} // end show_breadcrumbs()
