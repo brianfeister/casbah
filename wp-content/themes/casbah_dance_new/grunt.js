@@ -11,7 +11,7 @@ module.exports = function(grunt) {
       dist: {
         src: [
           'assets/css/less/casbah-bootstrap.less',
-          'assets/css/less/bootstrap/responsive.less'
+          'assets/css/less/custom-responsive.less'
         ],
         dest: 'assets/css/main.css',
         options: {

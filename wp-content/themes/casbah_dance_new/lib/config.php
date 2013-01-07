@@ -4,7 +4,7 @@
  */
 
 // Enable theme features
-add_theme_support('root-relative-urls');    // Enable relative URLs
+// add_theme_support('root-relative-urls');    // Enable relative URLs
 add_theme_support('rewrite-urls');          // Enable URL rewrites
 add_theme_support('h5bp-htaccess');         // Enable HTML5 Boilerplate's .htaccess
 add_theme_support('bootstrap-top-navbar');  // Enable Bootstrap's fixed navbar
@@ -28,8 +28,7 @@ function roots_display_sidebar() {
      * The second element must be an array even if there's only 1 argument.
      */
     array(
-      'is_404',
-      'is_front_page'
+      'is_404'
     ),
     /**
      * Page template checks (via is_page_template())
@@ -46,7 +45,7 @@ function roots_display_sidebar() {
 // #main CSS classes
 function roots_main_class() {
   if (roots_display_sidebar()) {
-    $class = 'span8';
+    $class = 'span9';
   } else {
     $class = 'span12';
   }
@@ -56,11 +55,11 @@ function roots_main_class() {
 
 // #sidebar CSS classes
 function roots_sidebar_class() {
-  return 'span4';
+  return 'span3';
 }
 
 // Configuration values
-define('GOOGLE_ANALYTICS_ID', ''); // UA-XXXXX-Y
+define('GOOGLE_ANALYTICS_ID', 'UA-4738681-34'); // UA-XXXXX-Y
 define('POST_EXCERPT_LENGTH', 40);
 
 /**

@@ -1,4 +1,5 @@
 <div class="page-header">
+  <div class="breadcrumbs"><?php show_breadcrumbs(); ?></div>
   <h1>
     <?php
       if (is_home()) {
