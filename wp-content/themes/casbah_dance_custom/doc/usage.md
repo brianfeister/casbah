@@ -1,5 +1,5 @@
 [Roots Theme homepage](http://www.rootstheme.com/) | [Documentation
-table of contents](README.md)
+table of contents](TOC.md)
 
 # Usage
 
@@ -28,23 +28,22 @@ A basic Roots theme initially looks like this:
 │       ├── main.js
 │       ├── plugins.js (includes bootstrap.js)
 │       └── vendor
-│           ├── jquery-1.8.0.min.js
-│           └── modernizr-2.6.1.min.js
+│           ├── jquery-1.8.3.min.js
+│           └── modernizr-2.6.2.min.js
 ├── doc
 ├── lang
 │   └── roots.pot
 ├── lib
-│   ├── actions.php
 │   ├── activation.php
 │   ├── cleanup.php
 │   ├── config.php
 │   ├── custom.php
 │   ├── h5bp-htaccess
 │   ├── htaccess.php
-│   ├── metaboxes.php
-│   ├── post-types.php
+│   ├── init.php
+│   ├── nav.php
 │   ├── scripts.php
-│   ├── template-tags.php
+│   ├── sidebar.php
 │   ├── utils.php
 │   └── widgets.php
 ├── templates
@@ -52,6 +51,7 @@ A basic Roots theme initially looks like this:
 │   ├── content.php
 │   ├── content-page.php
 │   ├── content-single.php
+│   ├── entry-meta.php
 │   ├── footer.php
 │   ├── head.php
 │   ├── header.php

@@ -1,4 +1,28 @@
 ### HEAD
+* Update to Bootstrap 2.2.2
+* Update to jQuery 1.8.3
+* Use `entry-summary` class for excerpts per Readability's Article Publishing Guidelines
+* Cleanup/refactor `lib/activation.php`
+* Remove `lib/post-types.php` and `lib/metaboxes.php`
+* Make sure Primary Navigation menu always gets created and has the location set upon activation, update activation permalink method
+* Update to Bootstrap 2.2.1
+* Update conditional feed method
+* Update to Bootstrap 2.2.0
+* Return instead of echo class names in `roots_main_class` and `roots_sidebar_class`
+* Move nav customizations into `lib/nav.php`
+
+### 6.1.0: October 2nd, 2012
+* Change roots_sidebar into a more explicit configuration array
+* Re-organize configuration/setup files
+* Update to jQuery 1.8.2
+* Refactor/simplify Roots vCard Widget
+* Move custom entry_meta code into template
+* Move Google Analytics code into footer template
+* Add CONTRIBUTING.md to assist with the new GitHub UI
+* Add nav walker support for CSS dividers and nav-header
+
+### 6.0.0: September 16th, 2012
+* Simplify nav walker and support 3rd level dropdowns
 * Update to Bootstrap 2.1.1, jQuery 1.8.1, Modernizr 2.6.2
 * Add bundled docs
 * Update all templates to use [PHP Alternative Syntax](http://php.net/manual/en/control-structures.alternative-syntax.php)

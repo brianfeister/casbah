@@ -11,10 +11,9 @@
  *   /wp-content/themes/themename/img/ to /img/
  *   /wp-content/plugins/              to /plugins/
  *
- * If you aren't using Apache, alternate configuration settings can be found in the wiki.
+ * If you aren't using Apache, alternate configuration settings can be found in the docs.
  *
- * @link https://github.com/retlehs/roots/wiki/Nginx
- * @link https://github.com/retlehs/roots/wiki/Lighttpd
+ * @link https://github.com/retlehs/roots/blob/master/doc/rewrites.md
  */
 
 if (stristr($_SERVER['SERVER_SOFTWARE'], 'apache') || stristr($_SERVER['SERVER_SOFTWARE'], 'litespeed') !== false) {
@@ -36,7 +35,7 @@ if (stristr($_SERVER['SERVER_SOFTWARE'], 'apache') || stristr($_SERVER['SERVER_S
       'assets/css/(.*)'      => THEME_PATH . '/assets/css/$1',
       'assets/js/(.*)'       => THEME_PATH . '/assets/js/$1',
       'assets/img/(.*)'      => THEME_PATH . '/assets/img/$1',
-      'assets/fonts/(.*)'    => THEME_PATH . '/assets/fonts/$1',
+      'assets/fonts/(.*)'      => THEME_PATH . '/assets/fonts/$1',
       'plugins/(.*)'  => RELATIVE_PLUGIN_PATH . '/$1'
     );
     $wp_rewrite->non_wp_rules = array_merge($wp_rewrite->non_wp_rules, $roots_new_non_wp_rules);

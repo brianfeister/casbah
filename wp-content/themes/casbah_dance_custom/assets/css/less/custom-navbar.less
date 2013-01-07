@@ -21,8 +21,8 @@
 // Gradient is applied to its own element because overflow visible is not honored by IE when filter is present
 .navbar-inner {
   min-height: @navbarHeight;
-  padding-left:  20px;
-  padding-right: 20px;
+  padding-left:  0;
+  padding-right: 0;
   padding: 0;
   .box-sizing(border-box);
 
@@ -181,9 +181,6 @@
   float: right; // redeclare due to specificity
   margin-right: 0; // remove margin on float right nav
 }
-.navbar .nav > li {
-  float: left;
-}
 
 // Links
 .navbar .nav > li {
@@ -191,14 +188,15 @@
   display: block;
   width: 14.2857%;
   .box-sizing(border-box);
-  > a {
+  &> a {
+    white-space: nowrap;
     text-align: center;
     color: @navbarLinkColor;
     text-decoration: none;
     padding: 7px 10px;
     text-shadow: 0 1px 0 @navbarBackgroundHighlight;
     font-family: @headingsFontFamily2;
-    font-size: 28px;
+    font-size: 26px;
     letter-spacing: 1px;
     text-transform: uppercase;
     .box-sizing(border-box);
@@ -235,7 +233,8 @@
   margin-left: 5px;
   margin-right: 5px;
   .buttonBackground(darken(@navbarBackgroundHighlight, 5%), darken(@navbarBackground, 5%));
-  .box-shadow(inset 0 1px 0 rgba(255,255,255,.1), 0 1px 0 rgba(255,255,255,.075));
+  @casbah-btn-navbar-shadow: inset 0 1px 0 rgba(255,255,255,.1), 0 1px 0 rgba(255,255,255,.075);
+  .box-shadow( @casbah-btn-navbar-shadow );
 }
 .navbar .btn-navbar .icon-bar {
   display: block;
@@ -406,7 +405,8 @@
       color: @white;
       background-color: @navbarInverseSearchBackground;
       border-color: @navbarInverseSearchBorder;
-      .box-shadow(inset 0 1px 2px rgba(0,0,0,.1), 0 1px 0 rgba(255,255,255,.15));
+
+      .box-shadow(~"inset 0 1px 2px rgba(0,0,0,.1), 0 1px 0 rgba(255,255,255,.15)");
       .transition(none);
       .placeholder(@navbarInverseSearchPlaceholderColor);
 

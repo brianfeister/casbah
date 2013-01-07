@@ -1,44 +1,74 @@
 <?php
 /**
- * Roots configuration and constants
+ * Roots configuration
  */
+
+// Enable theme features
 // add_theme_support('root-relative-urls');    // Enable relative URLs
 add_theme_support('rewrite-urls');          // Enable URL rewrites
 add_theme_support('h5bp-htaccess');         // Enable HTML5 Boilerplate's .htaccess
 add_theme_support('bootstrap-top-navbar');  // Enable Bootstrap's fixed navbar
 
-// Define which pages shouldn't have the sidebar
-function roots_sidebar() {
-  if (is_404() || is_page_template('page-custom.php')) {
-    return false;
-  } else {
-    return true;
-  }
+
+/**
+ * Define which pages shouldn't have the sidebar
+ *
+ * See lib/sidebar.php for more details
+ */
+function roots_display_sidebar() {
+  $sidebar_config = new Roots_Sidebar(
+    /**
+     * Conditional tag checks (http://codex.wordpress.org/Conditional_Tags)
+     * Any of these conditional tags that return true won't show the sidebar
+     *
+     * To use a function that accepts arguments, use the following format:
+     *
+     * array('function_name', array('arg1', 'arg2'))
+     *
+     * The second element must be an array even if there's only 1 argument.
+     */
+    array(
+      'is_404'
+    ),
+    /**
+     * Page template checks (via is_page_template())
+     * Any of these page templates that return true won't show the sidebar
+     */
+    array(
+      'page-custom.php'
+    )
+  );
+
+  return $sidebar_config->display;
 }
 
 // #main CSS classes
 function roots_main_class() {
-  if (display_roots_sidebar()) {
-    echo 'span9';
+  if (roots_display_sidebar()) {
+    $class = 'span9';
   } else {
-    echo 'span12';
+    $class = 'span12';
   }
+
+  return $class;
 }
 
 // #sidebar CSS classes
 function roots_sidebar_class() {
-  echo 'span3';
+  return 'span3';
 }
 
-$get_theme_name = explode('/themes/', get_template_directory());
-define('GOOGLE_ANALYTICS_ID',       ''); // UA-XXXXX-Y
-define('POST_EXCERPT_LENGTH',       40);
-define('WP_BASE',                   wp_base_dir());
-define('THEME_NAME',                next($get_theme_name));
-define('RELATIVE_PLUGIN_PATH',      str_replace(site_url() . '/', '', plugins_url()));
-define('FULL_RELATIVE_PLUGIN_PATH', WP_BASE . '/' . RELATIVE_PLUGIN_PATH);
-define('RELATIVE_CONTENT_PATH',     str_replace(site_url() . '/', '', content_url()));
-define('THEME_PATH',                RELATIVE_CONTENT_PATH . '/themes/' . THEME_NAME);
+// Configuration values
+define('GOOGLE_ANALYTICS_ID', 'UA-4738681-34'); // UA-XXXXX-Y
+define('POST_EXCERPT_LENGTH', 40);
 
-// Set the content width based on the theme's design and stylesheet
+/**
+* $content_width is a global variable used by WordPress for max image upload sizes and media embeds (in pixels)
+*
+* Example: If the content area is 640px wide, set $content_width = 620; so images and videos will not overflow.
+*
+* Default: 940px is the default Bootstrap container width.
+*
+* This is not required or used by Roots.
+*/
 if (!isset($content_width)) { $content_width = 940; }
